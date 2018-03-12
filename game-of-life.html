@@ -10,6 +10,8 @@
   var framesPerSecond = 10; // how fast to play the frames
   var grid_size=50; // how big to make the grid of cells
     
+  var generation = 0; // which generation are we on?
+    
   // seed 0= false 1 = true     grid of cells list of lists
   var cells = [ 
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -164,15 +166,18 @@
                   if (cells[i][j] == 1) // if you are currently alive...
                       newCells[i][j] = 1 // you are alive in the next generation.
           }
-      for(var i=1;i<(grid_size-1);i=i+1)
+    
+      for(var i=1;i<(grid_size-1);i=i+1) // it does not count the cells on the edge
           for(var j=1;j<(grid_size-1);j=j+1)
-              cells[i][j] = newCells[i][j]
-      setTimeout(function() {
+              cells[i][j] = newCells[i][j] // setting this generation to the next one
+      setTimeout(function() { // seting a timer to update the animation slowly
           window.requestAnimationFrame(draw);
       }, 1000 / framesPerSecond);
-  //    window.requestAnimationFrame(draw);
   }
-
-  window.requestAnimationFrame(draw);
+  // print the generation count to the console
+  console.log(generation++);
+    
+  //starts the first generation
+  window.requestAnimationFrame(draw); // call the draw() function
 </script>
 </html>
