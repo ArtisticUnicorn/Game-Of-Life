@@ -5,15 +5,12 @@
    <!-- (line 6)creates the box (border) that the cells go inside of -->
   <canvas id="myCanvas" height="600" width="600" style="border:1px solid #000000;"/>
   <script> // a  JavaScript (the name of this programming language)
-  var canvas = document.getElementById("myCanvas"); 
-// creates a version of canvas and allows it to work when you run the code
+  var canvas = document.getElementById("myCanvas");  // creates a version of canvas and allows it to work when you run the code
   var ctx = canvas.getContext("2d"); // setting the dimension to 2d
-
-   
-    var framesPerSecond = 10;
-// how fast to play the frames
-  var grid_size=50;
-// how big to make the grid of cells
+  var framesPerSecond = 10; // how fast to play the frames
+  var grid_size=50; // how big to make the grid of cells
+    
+  // seed 0= false 1 = true     grid of cells list of lists
   var cells = [ 
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
@@ -66,7 +63,7 @@
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   ];
-// line 20 to 69 set the seed
+// new cells tracks the cells in the next generation (starts at false)
   var newCells = [
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -119,10 +116,10 @@
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   ];
-/** neighborCount defines the neighborhood of eatch cell and when to come to life with statments like is cell = 0 
- * @param x is the x axis of the cell
- * @param y is the y axis of the cell
- * @return 
+/** neighborCount defines the number of living neighbors of each cell for when to come to life with statments like is cell = 0 
+ * @param x is the x coordinate of the cell
+ * @param y is the y coordinate of the cell
+ * @return c count of the number of neighbors that values are = to 1
  */
   function neighborCount(x,y) {
       var c=0; /* number of living neighbors */
@@ -145,26 +142,27 @@
       return c;
   }
     
-/** draws the cells and defines the colors
+/** draws the cells and defines the colors counts neighbors and changes values to alive or dead in new cells 
  *
  */
   function draw() {
-      ctx.globalCompositeOperation = 'destination-over';
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for(var i=1;i<(grid_size-1);i=i+1)
-          for(var j=1;j<(grid_size-1);j=j+1) {
-              if (cells[i][j] == 0)
-                  ctx.fillStyle = "rgba(200,200,200,255)";
+      ctx.globalCompositeOperation = 'destination-over'; // draw over old cells
+      ctx.clearRect(0, 0, canvas.width, canvas.height); //clear canvas from 0,0
+      for(var i=1;i<(grid_size-1);i=i+1) // loop over the cell rows
+          for(var j=1;j<(grid_size-1);j=j+1) { //loop over the columns
+              if (cells[i][j] == 0) // asking if cell's value is = to 0 (false)
+                  ctx.fillStyle = "rgba(200,200,200,255)"; //set false to gray 
               else
-                  ctx.fillStyle = "rgba(0,0,255,255)";
-              ctx.fillRect(i*11, j*11, 10, 10);
+                  ctx.fillStyle = "rgba(0,0,255,255)"; // else (alive) set to blue
+              ctx.fillRect(i*11, j*11, 10, 10); // draws cell
 
+              // sets if cell is alive or dead in next generation by counting the alive cells in the cell's neighborhood
               newCells[i][j] = 0 // Every cell is dead by default
               if (neighborCount(i, j) == 3) // three neighbors and you're alive
                   newCells[i][j] = 1
               else if (neighborCount(i, j) == 2) // if two neighbors, then...
-                  if (cells[i][j] == 1) // you're only alive if you already were
-                      newCells[i][j] = 1
+                  if (cells[i][j] == 1) // if you are currently alive...
+                      newCells[i][j] = 1 // you are alive in the next generation.
           }
       for(var i=1;i<(grid_size-1);i=i+1)
           for(var j=1;j<(grid_size-1);j=j+1)
