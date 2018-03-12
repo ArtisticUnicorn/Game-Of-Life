@@ -1,22 +1,19 @@
-<html>
+<html> <!-- hypertext markup language -->
   <!-- Vivian's Game of Life v.0.1 -->
-  <head>
-  </head>
+  <head> <!--- start of the head html -->
+  </head> <!--- end of head -->
+   <!-- (line 6)creates the box (border) that the cells go inside of -->
   <canvas id="myCanvas" height="600" width="600" style="border:1px solid #000000;"/>
-  <script>
-  var canvas = document.getElementById("myCanvas");
-  var ctx = canvas.getContext("2d");
+  <script> // a  JavaScript (the name of this programming language)
+  var canvas = document.getElementById("myCanvas"); 
+// creates a version of canvas and allows it to work when you run the code
+  var ctx = canvas.getContext("2d"); // setting the dimension to 2d
 
-  var r = 255;
-  var g = b = 0;
-  var a = 100;
-  var x = 10;
-  var y = 10;
-  var framesPerSecond = 10;
-
+    var framesPerSecond = 10;
+// how fast to play the frames
   var grid_size=50;
-
-  var cells = [
+// how big to make the grid of cells
+  var cells = [ 
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
@@ -68,7 +65,7 @@
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   ];
-
+// line 20 to 69 set the seed
   var newCells = [
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
@@ -121,7 +118,11 @@
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
   ];
-
+/** neighborCount defines the neighborhood of eatch cell and when to come to life with statments like is cell = 0 
+ * @param x is the x axis of the cell
+ * @param y is the y axis of the cell
+ * @return 
+ */
   function neighborCount(x,y) {
       var c=0; /* number of living neighbors */
       if (cells[x-1][y] == 1)
@@ -142,7 +143,10 @@
           c++; /* or c=c+1 */
       return c;
   }
-
+    
+/** draws the cells and defines the colors
+ *
+ */
   function draw() {
       ctx.globalCompositeOperation = 'destination-over';
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -152,7 +156,7 @@
                   ctx.fillStyle = "rgba(200,200,200,255)";
               else
                   ctx.fillStyle = "rgba(0,0,255,255)";
-              ctx.fillRect(x+(i*11), y+(j*11), 10, 10);
+              ctx.fillRect(i*11, j*11, 10, 10);
 
               newCells[i][j] = 0 // Every cell is dead by default
               if (neighborCount(i, j) == 3) // three neighbors and you're alive
